@@ -1,0 +1,10 @@
+module.exports=
+{
+    "development":{
+        "username":"root",
+        "password":"dhurshi1234",
+        "database":"project",
+        "host":"localhost",
+        "dialect":"mysql"
+    },
+};
