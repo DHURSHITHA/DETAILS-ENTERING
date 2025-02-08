@@ -1,29 +1,14 @@
 import React from "react";
-
+import { Outlet } from "react-router-dom";
 import NavBar from "../components/navbar/navbar";
-import Home from "../pages/Home";
-import About from "../pages/about";
-import Form from "../pages/form";
-import ResponsiveAppBar from "../components/navbar/menu";
-import {BrowserRouter as Router,Routes,Route} from "react-router-dom";
-function AppLayout(){
-    return(
+
+function AppLayout() {
+  return (
     <>
-    <Router>
-         <NavBar />  
-        {/* <ResponsiveAppBar /> */}
-        <Routes>
-            <Route path="/"element={<Home />}/>
-            <Route path="/about" element={<About />}/>
-            <Route path="/form" element={<Form />}/>
-
-
-        </Routes>
-
-    </Router>
-    
+      <NavBar />
+      <Outlet /> {/* This will dynamically load Home, About, Form, etc. */}
     </>
-    )
-
+  );
 }
+
 export default AppLayout;

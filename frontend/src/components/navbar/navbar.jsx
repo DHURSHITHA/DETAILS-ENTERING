@@ -1,55 +1,102 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import * as React from 'react';
+import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import AdbIcon from '@mui/icons-material/Adb';
+import { useNavigate } from 'react-router-dom';
 
-function NavBar() {
+const pages = [
+  { name: 'Home', path: '/' },
+  { name: 'About', path: '/about' },
+  { name: 'Form', path: '/form' }
+];
+
+const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+
+function Navbar() {
+  const navigate = useNavigate();
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const handleOpenNavMenu = (event) => setAnchorElNav(event.currentTarget);
+  const handleCloseNavMenu = () => setAnchorElNav(null);
+  const handleOpenUserMenu = (event) => setAnchorElUser(event.currentTarget);
+  const handleCloseUserMenu = () => setAnchorElUser(null);
+
   return (
-    <div 
-      style={{ 
-        width: "100%", // Full width
-        position: "fixed", // Fixed at the top
-        top: 0,
-        left: 0,
-        display: "flex", 
-        justifyContent: "space-between", 
-        alignItems: "center", 
-        padding: "15px 30px", 
-        backgroundColor: "#333", 
-        color: "white",
-        boxShadow: "0px 4px 8px rgba(0,0,0,0.2)",
-        zIndex: 1000, // Ensures it stays above other content
-      }}
-    >
-      <div style={{ fontSize: "24px", fontWeight: "bold" }}>
-        React Router
-      </div>
+    <AppBar position="fixed"> {/* Fixed Navbar at the top */}
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          {/* Logo on the left */}
+          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+            LOGO
+          </Typography>
 
-      <div style={{ display: "flex", gap: "20px" }}>
-        <Link to="/" style={styles.link}>
-           Home
-        </Link>
-        <Link to="/about" style={styles.link}>
-          About Us
-        </Link>
-        <Link to="/form" style={styles.link}>
-          Form
-        </Link>
-        
-      </div>
-    </div>
+          {/* Desktop Menu - Push to Right Corner */}
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: "flex-end" }}>
+            {pages.map((page) => (
+              <Button
+                key={page.name}
+                onClick={() => navigate(page.path)}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                {page.name}
+              </Button>
+            ))}
+          </Box>
+
+          {/* Mobile Menu */}
+          <Box sx={{ display: { xs: 'flex', md: 'none' }, ml: 'auto' }}>
+            <IconButton size="large" onClick={handleOpenNavMenu} color="inherit">
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              anchorEl={anchorElNav}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+            >
+              {pages.map((page) => (
+                <MenuItem key={page.name} onClick={() => { navigate(page.path); handleCloseNavMenu(); }}>
+                  <Typography textAlign="center">{page.name}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
+
+          {/* User Profile Menu */}
+          <Box sx={{ flexGrow: 0, ml: 2 }}>
+            <Tooltip title="Open settings">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar alt="User" src="/static/images/avatar/2.jpg" />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              anchorEl={anchorElUser}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              {settings.map((setting) => (
+                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">{setting}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 }
 
-const styles = {
-  link: {
-    textDecoration: "none",
-    color: "white",
-    fontSize: "18px",
-    display: "flex",
-    alignItems: "center",
-    gap: "5px",
-    padding: "5px 10px",
-    transition: "color 0.3s",
-  },
-};
-
-export default NavBar;
+export default Navbar;
